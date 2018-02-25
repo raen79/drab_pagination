@@ -41,7 +41,6 @@ defmodule DrabPagination.Mixfile do
   defp package() do
     [
       licenses: ["MIT"],
-      name: "DrabPagination",
       maintainers: ["Eran Peer", "Ioana Surdu-Bob"],
       links: %{"GitHub" => "https://github.com/raen79/drab_pagination"}
     ]
