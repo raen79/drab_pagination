@@ -1,0 +1,6 @@
+{
+  "name": "pagination",
+  "version": "0.1.0",
+  "main": "./priv/static/pagination.js",
+  "files": ["package.json", "priv/static/pagination.js"]
+}
