@@ -11,7 +11,10 @@ defmodule DrabPagination.Mixfile do
       lockfile: "mix.lock",
       elixir: "~> 1.5.2",
       start_permanent: Mix.env == :prod,
-      deps: deps()
+      deps: deps(),
+      description: description(),
+      package: package(),
+      source_url: "https://github.com/raen79/drab_pagination"
     ]
   end
 
@@ -27,6 +30,19 @@ defmodule DrabPagination.Mixfile do
     [
       {:drab, "~> 0.6.1"},
       {:ecto, "~> 2.1"}
+    ]
+  end
+
+  defp description() do
+    "An elixir library to paginate ecto tables using drab. The library can, for example, be used to create infinity scrolling."
+  end
+
+  defp package() do
+    [
+      licenses: ["MIT"],
+      name: "DrabPagination",
+      maintainers: ["Eran Peer", "Ioana Surdu-Bob"],
+      links: %{"GitHub" => "https://github.com/raen79/drab_pagination"}
     ]
   end
 end
