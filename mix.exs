@@ -29,7 +29,8 @@ defmodule DrabPagination.Mixfile do
   defp deps do
     [
       {:drab, "~> 0.6.1"},
-      {:ecto, "~> 2.1"}
+      {:ecto, "~> 2.1"},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 
