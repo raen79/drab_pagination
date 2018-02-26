@@ -26,10 +26,19 @@ export class Pagination {
     this._isDrabQueried = false;
   }
 
+  setDrabAsQueried() {
+    self = this;
+    this._isDrabQueried = true;
+
+    window.setTimeout(function(){
+      self._isDrabQueried = false;  
+    }, 500);
+  }
+
   _loadNewEntries() {
     if (this._isUserBelowBottom() && this._isDrabQueried == false) {
       this._drab.exec_elixir(this._fetchNextEntriesFuncName, {});
-      this._isDrabQueried = true;
+      this.setDrabAsQueried();
     }
   }
 

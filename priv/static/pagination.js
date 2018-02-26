@@ -42,11 +42,21 @@ var Pagination = exports.Pagination = function () {
       this._isDrabQueried = false;
     }
   }, {
+    key: "setDrabAsQueried",
+    value: function setDrabAsQueried() {
+      self = this;
+      this._isDrabQueried = true;
+
+      window.setTimeout(function () {
+        self._isDrabQueried = false;
+      }, 500);
+    }
+  }, {
     key: "_loadNewEntries",
     value: function _loadNewEntries() {
       if (this._isUserBelowBottom() && this._isDrabQueried == false) {
         this._drab.exec_elixir(this._fetchNextEntriesFuncName, {});
-        this._isDrabQueried = true;
+        this.setDrabAsQueried();
       }
     }
   }, {
