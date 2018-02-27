@@ -153,12 +153,6 @@ defmodule DrabPagination.Agent do
       |> Agent.update(&Map.put(&1, :per_page, amount))
   end
 
-  defp put_in_agent(socket, key, value) do
-    socket
-      |> agent_name()
-      |> Agent.update(&Map.put(&1, key, value))
-  end
-
   defp get_page_amount(socket) do
     socket
       |> agent_name()
