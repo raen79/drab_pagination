@@ -13,6 +13,7 @@ defmodule DrabPagination do
   do
     pagination_handler = :"fetch_next_#{Atom.to_string(entries_assigns_name)}"
     sorting_handler = :"sort_#{Atom.to_string(entries_assigns_name)}"
+    sorting_handler_li = :"sort_#{Atom.to_string(entries_assigns_name)}_li"
     searching_handler = :"search_#{Atom.to_string(entries_assigns_name)}"
     
     quote do
@@ -28,6 +29,7 @@ defmodule DrabPagination do
         end
       end
       
+      # for dropdowns constructed using <dropdown>
       def unquote(sorting_handler)(socket, %{"value" => value}) do
         {sorting_attr, sorting_order} =
           socket
@@ -42,7 +44,23 @@ defmodule DrabPagination do
                                     sorting_order,
                                     :sort)
       end
+
+      # for dropdowns constructed using <li>
+      def unquote(sorting_handler_li)(socket, %{"dataset" => %{"orderValue" => value}}) do
+        {sorting_attr, sorting_order} =
+          socket
+            |> peek(:sorting_dropdown_options)
+           |> Map.get(value)
         
+        OTP.Agents.Pagination.filter(socket,
+                                   unquote(entries_assigns_name),
+                                   unquote(parent_assigns_name),
+                                   unquote(fetch_entries_func),
+                                   sorting_attr,
+                                   sorting_order,
+                                   :sort)
+      end
+                                   
       def unquote(searching_handler)(socket, %{"dataset" => %{"attr" => search_attr}} = params) when is_binary(search_attr) do
         params = update_in(params["dataset"]["attr"], &(String.to_atom(&1)))
         unquote(searching_handler)(socket, params)
@@ -70,6 +88,7 @@ defmodule DrabPagination do
   do
     pagination_handler = :"fetch_next_#{Atom.to_string(entries_assigns_name)}"
     sorting_handler = :"sort_#{Atom.to_string(entries_assigns_name)}"
+    sorting_handler_li = :"sort_#{Atom.to_string(entries_assigns_name)}_li"
     searching_handler = :"search_#{Atom.to_string(entries_assigns_name)}"
 
     quote do
@@ -81,7 +100,23 @@ defmodule DrabPagination do
         end
       end
 
+      # for dropdowns constructed using <dropdown>
       def unquote(sorting_handler)(socket, %{"value" => value}) do
+        {sorting_attr, sorting_order} =
+          socket
+            |> peek(:sorting_dropdown_options)
+            |> Map.get(value)
+
+        OTP.Agents.Pagination.filter(socket,
+                                   unquote(entries_assigns_name),
+                                   unquote(fetch_entries_func),
+                                   sorting_attr,
+                                   sorting_order,
+                                   :sort)
+      end
+
+      # for dropdowns constructed using <li>
+      def unquote(sorting_handler_li)(socket, %{"dataset" => %{"orderValue" => value}}) do
         {sorting_attr, sorting_order} =
           socket
             |> peek(:sorting_dropdown_options)
