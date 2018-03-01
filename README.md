@@ -21,6 +21,8 @@ $ mix deps.get
 
 ## Usage
 
+These examples are based on `User` and `Comment` schemas, where a user has many comments.
+
 ### Pagination
 
 Use `paginate` to get the paginated query.
@@ -47,22 +49,27 @@ end
 ```
 
 In the controller, access either the function you created in the API or the paginate function. Specify how many items you want to load at once using `:per_page`. `page: 1` and `offset: 0` are used for future iterations, so you should include them too, even if they are obvious.
-`{users, _pagination_params} <- Context.list_paginated_users(%{per_page: 5, page: 1, offset: 0})`
+```elixir
+{users, _pagination_params} <- Context.list_paginated_users(%{per_page: 5, page: 1, offset: 0})
+```
 
 Note: make sure your controller uses Drab.
-`use Drab.Controller`
+```elixir
+use Drab.Controller
+```
 
-In the commander, include the settings about the queries you want to be paginated in the controller. If your query is generated from the parent (such as the comments of a ticket, then you need to add :parent_assigns_name, otherwhise not.)
+In the commander, include the settings about the queries you want to be paginated in the controller. If your query is generated from the parent (such as the comments of a user, then you need to add :parent_assigns_name, otherwhise not.)
 ```elixir
 use Pagination, [
-                  [entries_assigns_name: :tickets, fetch_entries_func: &Context.list_paginated_users/1],
-                  [entries_assigns_name: :comments, parent_assigns_name: :ticket, fetch_entries_func: &Context.list_paginated_user_comments/2]
+                  [entries_assigns_name: :users, fetch_entries_func: &Context.list_paginated_users/1],
+                  [entries_assigns_name: :comments, parent_assigns_name: :user, fetch_entries_func: &Context.list_paginated_user_comments/2]
                 ]
   
   onconnect :onconnect
   ondisconnect :ondisconnect
 ```
-:entries_assigns_name and :parent_assigns_name are the assigns you give to the structure/changeset. If in the controller you are rendering `users: paginated_users`, then `users` is your `:entries_assigns_name`.
+`:entries_assigns_name` and `:parent_assigns_name` are the assigns you give to the structure/changeset. If in the controller you are rendering `users: paginated_users`, then `users` is your `:entries_assigns_name`.
+`:fetch_entries_func` is the name function you created in the API to retrieve users. It should start with `&`, and finish with the number of parameters (`/2` if there's a parent, `/1` otherwhise). 
 
 ### Sorting
 
@@ -77,14 +84,18 @@ sorting_dropdown_options =
       "Date (Desc)" => {:inserted_at, :desc}
     }
 ```
-If you are using a custom dropdown (using <li>'s), you need send a variable containing the current soring option (which is needed for later processing, too).
-`current_sorting_option = "Date (Asc)"`
+If you are using a custom dropdown (using `<li>`'s), you need send a variable containing the current soring option (which is needed for later processing, too).
+```elixir
+current_sorting_option = "Date (Asc)"
+```
 
 #### Templates
 
 You need some HTML to let the user sort. Use this dropdown to display a classic dropdown.
-`<%= Drab_pagination.HTML.sort_by_dropdown(:users, @sorting_dropdown_options) %>`
-If you want to add classes to the dropdown, add the :class attribute, like this: `class: "my-class"`
+```elixir
+<%= Drab_pagination.HTML.sort_by_dropdown(:users, @sorting_dropdown_options) %>
+```
+If you want to add classes to the dropdown, add the `:class` attribute, like this: `class: "my-class"`
  
 If you are using a custom dropdown, the loop printing the options should look similar to this:
 ```elixir
@@ -94,6 +105,7 @@ If you are using a custom dropdown, the loop printing the options should look si
   </li>
 <% end %>
 ```
+Note: The `drab-click` attribute has to be given according to the entries assigns name. The format has to be `sort_[entries_assigns_name]_li`.
 
 ### Searching
 
@@ -101,9 +113,11 @@ To sort and search, you still need to have pagination set up.
 There's no additions tou need to make in the controller. Your HTML should look like this:
 
 ```elixir
-<input name="search" data-attr="title" drab-keyup="search_users" type="text"> </input>
+<%= Pagination.HTML.search(:users, :title) %>
 ```
-In this example we are searching in User using the attribute "title.
+In this example we are searching in `User` using the attribute `title`.
+
+You can add these optional parameters: `:placeholder`, `:class` and `:id`
 
 
 The docs can be found at [https://hexdocs.pm/drab_pagination](https://hexdocs.pm/drab_pagination).
