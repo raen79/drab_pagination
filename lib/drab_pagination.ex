@@ -59,6 +59,8 @@ defmodule DrabPagination do
                                    sorting_attr,
                                    sorting_order,
                                    :sort)
+
+        poke(socket, current_sorting_option: value)
       end
                                    
       def unquote(searching_handler)(socket, %{"dataset" => %{"attr" => search_attr}} = params) when is_binary(search_attr) do
@@ -128,6 +130,8 @@ defmodule DrabPagination do
                                    sorting_attr,
                                    sorting_order,
                                    :sort)
+        
+        poke(socket, current_sorting_option: value)
       end
 
       def unquote(searching_handler)(socket, %{"dataset" => %{"attr" => search_attr}} = params) when is_binary(search_attr) do
