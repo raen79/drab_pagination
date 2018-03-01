@@ -113,7 +113,7 @@ To sort and search, you still need to have pagination set up.
 There's no additions tou need to make in the controller. Your HTML should look like this:
 
 ```elixir
-<%= Pagination.HTML.search(:users, :title) %>
+<%= Drab_pagination.HTML.search(:users, :title) %>
 ```
 In this example we are searching in `User` using the attribute `title`.
 
