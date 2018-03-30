@@ -1,4 +1,4 @@
-# Pagination
+# [WIP] Pagination
 
 Library that paginates with infinity scroll, sorts and searches. It uses [Drab](https://github.com/grych/drab) library to make back-end requests and manipulate the DOM.
 
